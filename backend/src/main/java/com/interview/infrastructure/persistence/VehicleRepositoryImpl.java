@@ -38,6 +38,11 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
+    public boolean existsByCustomerId(UUID customerId) {
+        return jpaRepository.existsByCustomerId(customerId);
+    }
+
+    @Override
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }

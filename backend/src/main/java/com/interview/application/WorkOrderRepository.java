@@ -15,5 +15,9 @@ public interface WorkOrderRepository {
 
     List<WorkOrder> findAll(Optional<WorkOrderStatus> status);
 
+    boolean existsByVehicleId(UUID vehicleId);
+
+    boolean existsByCustomerId(UUID customerId);
+
     void deleteById(UUID id);
 }

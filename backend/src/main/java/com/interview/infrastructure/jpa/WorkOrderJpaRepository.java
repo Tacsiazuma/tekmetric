@@ -9,4 +9,8 @@ import java.util.UUID;
 public interface WorkOrderJpaRepository extends JpaRepository<WorkOrderEntity, UUID> {
 
     List<WorkOrderEntity> findAllByStatus(WorkOrderStatusEntity status);
+
+    boolean existsByVehicleId(UUID vehicleId);
+
+    boolean existsByCustomerId(UUID customerId);
 }

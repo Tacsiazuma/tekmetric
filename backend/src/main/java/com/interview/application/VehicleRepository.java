@@ -14,5 +14,7 @@ public interface VehicleRepository {
 
     List<Vehicle> findAll();
 
+    boolean existsByCustomerId(UUID customerId);
+
     void deleteById(UUID id);
 }

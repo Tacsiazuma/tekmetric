@@ -43,6 +43,16 @@ public class WorkOrderRepositoryImpl implements WorkOrderRepository {
     }
 
     @Override
+    public boolean existsByVehicleId(UUID vehicleId) {
+        return jpaRepository.existsByVehicleId(vehicleId);
+    }
+
+    @Override
+    public boolean existsByCustomerId(UUID customerId) {
+        return jpaRepository.existsByCustomerId(customerId);
+    }
+
+    @Override
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }
