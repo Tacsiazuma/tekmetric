@@ -10,6 +10,7 @@ import com.interview.application.vehicle.UpdateVehicle;
 import com.interview.domain.Vehicle;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vehicles")
+@Transactional
 public class VehicleController {
 
     private final CreateVehicle createVehicle;
@@ -48,6 +50,7 @@ public class VehicleController {
     }
 
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public ResponseEntity<VehicleResponse> getById(@PathVariable UUID id) {
         Vehicle vehicle = getVehicle.execute(id);
         return ResponseEntity.ok(toResponse(vehicle));
@@ -66,6 +69,7 @@ public class VehicleController {
     }
 
     @GetMapping
+    @Transactional(readOnly = true)
     public ResponseEntity<List<VehicleResponse>> list() {
         List<VehicleResponse> list = listVehicles.execute().stream()
                 .map(this::toResponse)

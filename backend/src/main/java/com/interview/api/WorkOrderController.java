@@ -12,6 +12,7 @@ import com.interview.domain.WorkOrder;
 import com.interview.domain.WorkOrderStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/work-orders")
+@Transactional
 public class WorkOrderController {
 
     private final CreateWorkOrder createWorkOrder;
@@ -51,6 +53,7 @@ public class WorkOrderController {
     }
 
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public ResponseEntity<WorkOrderResponse> getById(@PathVariable UUID id) {
         WorkOrder workOrder = getWorkOrder.execute(id);
         return ResponseEntity.ok(toResponse(workOrder));
@@ -70,6 +73,7 @@ public class WorkOrderController {
     }
 
     @GetMapping
+    @Transactional(readOnly = true)
     public ResponseEntity<List<WorkOrderResponse>> list(
             @RequestParam(required = false) Optional<WorkOrderStatus> status) {
         List<WorkOrderResponse> list = listWorkOrders.execute(status).stream()

@@ -10,6 +10,7 @@ import com.interview.application.customer.UpdateCustomer;
 import com.interview.domain.Customer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
+@Transactional
 public class CustomerController {
 
     private final CreateCustomer createCustomer;
@@ -44,6 +46,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public ResponseEntity<CustomerResponse> getById(@PathVariable UUID id) {
         Customer customer = getCustomer.execute(id);
         return ResponseEntity.ok(toResponse(customer));
@@ -57,6 +60,7 @@ public class CustomerController {
     }
 
     @GetMapping
+    @Transactional(readOnly = true)
     public ResponseEntity<List<CustomerResponse>> list() {
         List<CustomerResponse> list = listCustomers.execute().stream()
                 .map(this::toResponse)

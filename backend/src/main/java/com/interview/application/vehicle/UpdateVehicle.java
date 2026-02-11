@@ -3,12 +3,9 @@ package com.interview.application.vehicle;
 import com.interview.application.EntityNotFoundException;
 import com.interview.application.VehicleRepository;
 import com.interview.domain.Vehicle;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@Service
 public class UpdateVehicle {
 
     private final VehicleRepository repository;
@@ -17,7 +14,6 @@ public class UpdateVehicle {
         this.repository = repository;
     }
 
-    @Transactional
     public Vehicle execute(UUID id, String plateNumber, String model, UUID customerId) {
         Vehicle existing = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle not found: " + id));

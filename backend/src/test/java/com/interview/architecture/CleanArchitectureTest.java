@@ -51,6 +51,19 @@ class CleanArchitectureTest {
     }
 
     @Test
+    void applicationMustNotDependOnSpring() {
+        ArchRule rule = noClasses()
+                .that().resideInAPackage("..application..")
+                .should().dependOnClassesThat().resideInAnyPackage(
+                        "org.springframework..",
+                        "javax.persistence..",
+                        "jakarta.persistence..",
+                        "org.hibernate.."
+                );
+        rule.check(classes);
+    }
+
+    @Test
     void applicationMustNotDependOnInfrastructureOrApi() {
         ArchRule rule = noClasses()
                 .that().resideInAPackage("..application..")
