@@ -13,20 +13,6 @@
 	],
 	"item": [
 		{
-			"name": "Welcome",
-			"item": [
-				{
-					"name": "GET Welcome",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{baseUrl}}/api/welcome",
-						"description": "Health/welcome endpoint."
-					}
-				}
-			]
-		},
-		{
 			"name": "Customers",
 			"item": [
 				{
