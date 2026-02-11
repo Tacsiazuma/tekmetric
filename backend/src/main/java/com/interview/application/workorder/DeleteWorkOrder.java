@@ -1,6 +1,5 @@
 package com.interview.application.workorder;
 
-import com.interview.application.EntityNotFoundException;
 import com.interview.application.WorkOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +17,6 @@ public class DeleteWorkOrder {
 
     @Transactional
     public void execute(UUID id) {
-        if (!repository.findById(id).isPresent()) {
-            throw new EntityNotFoundException("WorkOrder not found: " + id);
-        }
-        repository.deleteById(id);
+        repository.findById(id).ifPresent(wo -> repository.deleteById(id));
     }
 }

@@ -1,6 +1,5 @@
 package com.interview.application.vehicle;
 
-import com.interview.application.EntityNotFoundException;
 import com.interview.application.VehicleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +17,6 @@ public class DeleteVehicle {
 
     @Transactional
     public void execute(UUID id) {
-        if (!repository.findById(id).isPresent()) {
-            throw new EntityNotFoundException("Vehicle not found: " + id);
-        }
-        repository.deleteById(id);
+        repository.findById(id).ifPresent(v -> repository.deleteById(id));
     }
 }
