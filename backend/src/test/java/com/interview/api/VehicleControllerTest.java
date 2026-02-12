@@ -90,6 +90,34 @@ class VehicleControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @DisplayName("Create vehicle should return 400 when customerId does not exist")
+    void create_nonexistent_customerId_400() throws Exception {
+        // GIVEN valid request body but nonexistent customerId
+        UUID nonexistentCustomerId = UUID.randomUUID();
+        String body = loadRequest("create-valid.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString());
+        String expected = loadExpected("error-400-reference-customer.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString());
+        // WHEN
+        ResultActions result = post("/vehicles", body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
+    @DisplayName("Update vehicle should return 400 when customerId does not exist")
+    void update_nonexistent_customerId_400() throws Exception {
+        // GIVEN one customer and one vehicle, update with nonexistent customerId
+        String customerId = createCustomerAndGetId();
+        String id = createVehicleAndGetId(customerId);
+        UUID nonexistentCustomerId = UUID.randomUUID();
+        String body = loadRequest("update-valid.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString());
+        String expected = loadExpected("error-400-reference-customer.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString());
+        // WHEN
+        ResultActions result = put("/vehicles/" + id, body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
     @DisplayName("Get vehicle by id should return 200 and body when vehicle exists")
     void getById_exists_200() throws Exception {
         // GIVEN one customer and one vehicle

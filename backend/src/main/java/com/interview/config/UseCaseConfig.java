@@ -52,8 +52,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public CreateVehicle createVehicle(VehicleRepository repository) {
-        return new CreateVehicle(repository);
+    public CreateVehicle createVehicle(VehicleRepository repository, CustomerRepository customerRepository) {
+        return new CreateVehicle(repository, customerRepository);
     }
 
     @Bean
@@ -62,8 +62,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public UpdateVehicle updateVehicle(VehicleRepository repository) {
-        return new UpdateVehicle(repository);
+    public UpdateVehicle updateVehicle(VehicleRepository repository, CustomerRepository customerRepository) {
+        return new UpdateVehicle(repository, customerRepository);
     }
 
     @Bean
@@ -78,8 +78,9 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public CreateWorkOrder createWorkOrder(WorkOrderRepository repository) {
-        return new CreateWorkOrder(repository);
+    public CreateWorkOrder createWorkOrder(WorkOrderRepository repository, CustomerRepository customerRepository,
+                                          VehicleRepository vehicleRepository) {
+        return new CreateWorkOrder(repository, customerRepository, vehicleRepository);
     }
 
     @Bean
@@ -88,8 +89,9 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public UpdateWorkOrder updateWorkOrder(WorkOrderRepository repository) {
-        return new UpdateWorkOrder(repository);
+    public UpdateWorkOrder updateWorkOrder(WorkOrderRepository repository, CustomerRepository customerRepository,
+                                           VehicleRepository vehicleRepository) {
+        return new UpdateWorkOrder(repository, customerRepository, vehicleRepository);
     }
 
     @Bean

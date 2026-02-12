@@ -1,6 +1,7 @@
 package com.interview.api;
 
 import com.interview.application.EntityNotFoundException;
+import com.interview.application.InvalidReferenceException;
 import com.interview.application.ReferencedEntityException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ReferencedEntityException.class)
     public ResponseEntity<Map<String, String>> handleReferencedEntity(ReferencedEntityException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidReferenceException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidReference(InvalidReferenceException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

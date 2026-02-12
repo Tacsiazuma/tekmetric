@@ -93,6 +93,50 @@ class WorkOrderControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @DisplayName("Create work order should return 400 when customerId does not exist")
+    void create_nonexistent_customerId_400() throws Exception {
+        // GIVEN one vehicle, request with nonexistent customerId
+        String customerId = createCustomerAndGetId();
+        String vehicleId = createVehicleAndGetId(customerId);
+        UUID nonexistentCustomerId = UUID.randomUUID();
+        String body = loadRequest("create-valid.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString()).replace("__VEHICLE_ID__", vehicleId);
+        String expected = loadExpected("error-400-reference-customer.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString());
+        // WHEN
+        ResultActions result = post("/work-orders", body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
+    @DisplayName("Create work order should return 400 when vehicleId does not exist")
+    void create_nonexistent_vehicleId_400() throws Exception {
+        // GIVEN one customer, request with nonexistent vehicleId
+        String customerId = createCustomerAndGetId();
+        UUID nonexistentVehicleId = UUID.randomUUID();
+        String body = loadRequest("create-valid.json").replace("__CUSTOMER_ID__", customerId).replace("__VEHICLE_ID__", nonexistentVehicleId.toString());
+        String expected = loadExpected("error-400-reference-vehicle.json").replace("__VEHICLE_ID__", nonexistentVehicleId.toString());
+        // WHEN
+        ResultActions result = post("/work-orders", body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
+    @DisplayName("Create work order should return 400 when vehicle does not belong to given customer")
+    void create_vehicle_not_belong_to_customer_400() throws Exception {
+        // GIVEN two customers, one vehicle for customer A; request work order with customer B and vehicle of A
+        String customerA = createCustomerAndGetId();
+        String vehicleId = createVehicleAndGetId(customerA);
+        String customerB = createCustomerAndGetId();
+        String body = loadRequest("create-valid.json").replace("__CUSTOMER_ID__", customerB).replace("__VEHICLE_ID__", vehicleId);
+        String expected = loadExpected("error-400-vehicle-not-belong-to-customer.json");
+        // WHEN
+        ResultActions result = post("/work-orders", body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
     @DisplayName("Get work order by id should return 200 and body when work order exists")
     void getById_exists_200() throws Exception {
         // GIVEN one customer, one vehicle and one work order
@@ -209,6 +253,54 @@ class WorkOrderControllerTest extends AbstractControllerTest {
         String id = createWorkOrderAndGetId(customerId, vehicleId);
         String body = loadRequest("update-missing-status.json").replace("__CUSTOMER_ID__", customerId).replace("__VEHICLE_ID__", vehicleId);
         String expected = loadExpected("error-400-validation-status.json");
+        // WHEN
+        ResultActions result = put("/work-orders/" + id, body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
+    @DisplayName("Update work order should return 400 when customerId does not exist")
+    void update_nonexistent_customerId_400() throws Exception {
+        // GIVEN one work order, update with nonexistent customerId
+        String customerId = createCustomerAndGetId();
+        String vehicleId = createVehicleAndGetId(customerId);
+        String id = createWorkOrderAndGetId(customerId, vehicleId);
+        UUID nonexistentCustomerId = UUID.randomUUID();
+        String body = loadRequest("update-valid.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString()).replace("__VEHICLE_ID__", vehicleId);
+        String expected = loadExpected("error-400-reference-customer.json").replace("__CUSTOMER_ID__", nonexistentCustomerId.toString());
+        // WHEN
+        ResultActions result = put("/work-orders/" + id, body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
+    @DisplayName("Update work order should return 400 when vehicleId does not exist")
+    void update_nonexistent_vehicleId_400() throws Exception {
+        // GIVEN one work order, update with nonexistent vehicleId
+        String customerId = createCustomerAndGetId();
+        String vehicleId = createVehicleAndGetId(customerId);
+        String id = createWorkOrderAndGetId(customerId, vehicleId);
+        UUID nonexistentVehicleId = UUID.randomUUID();
+        String body = loadRequest("update-valid.json").replace("__CUSTOMER_ID__", customerId).replace("__VEHICLE_ID__", nonexistentVehicleId.toString());
+        String expected = loadExpected("error-400-reference-vehicle.json").replace("__VEHICLE_ID__", nonexistentVehicleId.toString());
+        // WHEN
+        ResultActions result = put("/work-orders/" + id, body);
+        // THEN
+        assertResponse(result, status().isBadRequest(), expected);
+    }
+
+    @Test
+    @DisplayName("Update work order should return 400 when vehicle does not belong to given customer")
+    void update_vehicle_not_belong_to_customer_400() throws Exception {
+        // GIVEN two customers, one vehicle for customer A, one work order; update with customer B and vehicle of A
+        String customerA = createCustomerAndGetId();
+        String vehicleId = createVehicleAndGetId(customerA);
+        String customerB = createCustomerAndGetId();
+        String id = createWorkOrderAndGetId(customerB, createVehicleAndGetId(customerB));
+        String body = loadRequest("update-valid.json").replace("__CUSTOMER_ID__", customerB).replace("__VEHICLE_ID__", vehicleId);
+        String expected = loadExpected("error-400-vehicle-not-belong-to-customer.json");
         // WHEN
         ResultActions result = put("/work-orders/" + id, body);
         // THEN
