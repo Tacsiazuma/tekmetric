@@ -59,14 +59,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-wrapper-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <distributionUrl>https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.zip</distributionUrl>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
